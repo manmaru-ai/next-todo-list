@@ -18,15 +18,6 @@ interface ProfileDialogProps {
     level: number;
     currentPoints: number;
     nextLevelPoints: number;
-    streak: number;
-    badges: Array<{
-      id: string;
-      name: string;
-      description: string;
-      icon: string;
-      acquired: boolean;
-      acquiredAt?: string;
-    }>;
   };
 }
 
@@ -40,9 +31,8 @@ export function ProfileDialog({ open, onOpenChange, points, history, stats }: Pr
           <DialogTitle>プロフィール</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="overview" className="py-4">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="overview">概要</TabsTrigger>
-            <TabsTrigger value="badges">バッジ</TabsTrigger>
             <TabsTrigger value="history">履歴</TabsTrigger>
           </TabsList>
           <TabsContent value="overview">
@@ -56,39 +46,12 @@ export function ProfileDialog({ open, onOpenChange, points, history, stats }: Pr
                   </p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 text-center">
+              <div className="grid grid-cols-1 gap-4 text-center">
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-semibold">総獲得ポイント</h4>
                   <p className="text-2xl font-bold text-primary">{points} pt</p>
                 </div>
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-semibold">連続ログイン</h4>
-                  <p className="text-2xl font-bold text-primary">{stats.streak} 日</p>
-                </div>
               </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="badges">
-            <div className="grid grid-cols-2 gap-4">
-              {stats.badges.map((badge) => (
-                <div 
-                  key={badge.id} 
-                  className={`p-4 border rounded-lg ${badge.acquired ? 'bg-primary/10' : 'opacity-50'}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">{badge.icon}</span>
-                    <div>
-                      <h4 className="font-semibold">{badge.name}</h4>
-                      <p className="text-sm text-muted-foreground">{badge.description}</p>
-                    </div>
-                  </div>
-                  {badge.acquired && badge.acquiredAt && (
-                    <p className="text-xs text-muted-foreground mt-2">
-                      獲得: {format(new Date(badge.acquiredAt), 'yyyy/MM/dd')}
-                    </p>
-                  )}
-                </div>
-              ))}
             </div>
           </TabsContent>
           <TabsContent value="history">
@@ -111,5 +74,5 @@ export function ProfileDialog({ open, onOpenChange, points, history, stats }: Pr
         </Tabs>
       </DialogContent>
     </Dialog>
-  )
+  );
 } 

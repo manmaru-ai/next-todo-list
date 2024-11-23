@@ -24,11 +24,19 @@ export const useStorage = () => {
 
   const updateTask = async (id: string, updates: Partial<Task>) => {
     const tasks = await getTasks();
-    const updatedTasks = tasks.map((task: Task) =>
-      task.id === id ? { ...task, ...updates } : task
-    );
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-    return updatedTasks.find((task: Task) => task.id === id);
+    const taskIndex = tasks.findIndex((task: Task) => task.id === id);
+    
+    if (taskIndex === -1) return null;
+    
+    const updatedTask = {
+      ...tasks[taskIndex],
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    
+    tasks[taskIndex] = updatedTask;
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    return updatedTask;
   };
 
   const deleteTask = async (id: string) => {

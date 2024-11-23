@@ -52,7 +52,46 @@ export function AdvancedDashboardComponent() {
     const fetchTasks = async () => {
       try {
         const data = await storage.getTasks();
-        setTasks(data);
+        let filteredData = [...data];
+
+        // 検索フィルター
+        if (searchQuery) {
+          filteredData = filteredData.filter(task => 
+            task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            task.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            task.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+          );
+        }
+
+        // 優先度・ステータスフィルター
+        if (activeFilter.priority) {
+          filteredData = filteredData.filter(task => task.priority === activeFilter.priority);
+        }
+        if (activeFilter.status) {
+          filteredData = filteredData.filter(task => task.status === activeFilter.status);
+        }
+
+        // ソート
+        if (activeSort.field) {
+          filteredData.sort((a, b) => {
+            let compareA = a[activeSort.field!];
+            let compareB = b[activeSort.field!];
+
+            if (activeSort.field === 'priority') {
+              const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+              compareA = priorityOrder[compareA as keyof typeof priorityOrder];
+              compareB = priorityOrder[compareB as keyof typeof priorityOrder];
+            }
+
+            if (activeSort.direction === 'ascending') {
+              return compareA > compareB ? 1 : -1;
+            } else {
+              return compareA < compareB ? 1 : -1;
+            }
+          });
+        }
+
+        setTasks(filteredData);
       } catch (error) {
         console.error('Failed to fetch tasks:', error);
       }
@@ -82,9 +121,23 @@ export function AdvancedDashboardComponent() {
   const updateTaskProgress = async (id: string, progress: number) => {
     try {
       const oldTask = tasks.find(t => t.id === id);
-      await storage.updateTask(id, { progress });
+      if (!oldTask) return;
+
+      const updates: Partial<Task> = { progress };
+
+      // 進捗が100%になった場合、ステータスを完了に更新
+      if (progress === 100 && oldTask.status !== 'Done') {
+        updates.status = 'Done';
+      }
+      // 進捗が100%未満の場合で、ステータスが未着手の場合は進行中に更新
+      else if (progress > 0 && progress < 100 && oldTask.status === 'To Do') {
+        updates.status = 'In Progress';
+      }
+
+      await storage.updateTask(id, updates);
+      const updatedTask = { ...oldTask, ...updates };
       setTasks(tasks.map(task => 
-        task.id === id ? { ...task, progress } : task
+        task.id === id ? updatedTask : task
       ));
 
       if (oldTask) {
@@ -100,7 +153,7 @@ export function AdvancedDashboardComponent() {
     } catch (error) {
       console.error('Failed to update task:', error);
     }
-  }
+  };
 
   const updateTask = async (id: string, updates: Partial<CreateTaskInput>) => {
     try {
@@ -228,44 +281,46 @@ export function AdvancedDashboardComponent() {
                     )}
                   </Button>
                   {showNotifications && (
-                    <div className="absolute right-0 mt-2 w-80 bg-background border rounded-lg shadow-lg z-50">
-                      <div className="p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold">通知</h3>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => setShowNotifications(false)}
-                            className="h-6 w-6"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                        {notifications.length > 0 ? (
-                          <div className="space-y-2 max-h-[300px] overflow-y-auto">
-                            {notifications.map((notification) => (
-                              <div 
-                                key={notification.id} 
-                                className="p-3 bg-muted rounded-md hover:bg-muted/80 transition-colors"
-                              >
-                                <div className="flex items-start justify-between">
-                                  <div>
-                                    <div className="font-medium text-sm text-destructive">
-                                      {notification.title}
-                                    </div>
-                                    <div className="text-xs text-muted-foreground mt-1">
-                                      {notification.message}
+                    <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-background border rounded-lg shadow-lg z-50">
+                      <div className="fixed sm:relative inset-x-2 top-16 sm:inset-auto sm:top-auto">
+                        <div className="p-4 bg-background border rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-semibold">通知</h3>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              onClick={() => setShowNotifications(false)}
+                              className="h-6 w-6"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          {notifications.length > 0 ? (
+                            <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                              {notifications.map((notification) => (
+                                <div 
+                                  key={notification.id} 
+                                  className="p-3 bg-muted rounded-md hover:bg-muted/80 transition-colors"
+                                >
+                                  <div className="flex items-start justify-between">
+                                    <div>
+                                      <div className="font-medium text-sm text-destructive">
+                                        {notification.title}
+                                      </div>
+                                      <div className="text-xs text-muted-foreground mt-1">
+                                        {notification.message}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="text-sm text-muted-foreground text-center py-4">
-                            No notifications
-                          </div>
-                        )}
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="text-sm text-muted-foreground text-center py-4">
+                              No notifications
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -470,14 +525,40 @@ export function AdvancedDashboardComponent() {
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-between mt-auto">
-                      <div className="flex items-center space-x-2">
-                        <Progress value={task.progress} className="w-[60px]" />
-                        <span className="text-sm font-medium">{task.progress}%</span>
-                      </div>
+                      <Select
+                        value={task.status}
+                        onValueChange={(value: 'To Do' | 'In Progress' | 'Done') => {
+                          const updates: Partial<Task> = { status: value };
+                          if (value === 'Done') {
+                            updates.progress = 100;
+                          } else if (value === 'In Progress') {
+                            updates.progress = 50;
+                          } else {
+                            updates.progress = 0;
+                          }
+                          updateTask(task.id, updates);
+                          
+                          // ポイント付与のロジック
+                          if (value === 'Done' && task.status !== 'Done') {
+                            const basePoints = 100;
+                            const priorityBonus = task.priority === 'High' ? 50 : 
+                                                    task.priority === 'Medium' ? 30 : 10;
+                            addPoints(`タスク完了: ${task.title}`, basePoints + priorityBonus);
+                          } else if (value === 'In Progress' && task.status === 'To Do') {
+                            addPoints(`タスク開始: ${task.title}`, 10);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="w-[140px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="To Do">未着手</SelectItem>
+                          <SelectItem value="In Progress">進行中</SelectItem>
+                          <SelectItem value="Done">完了</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <div className="flex space-x-2">
-                        <Button variant="ghost" size="icon" onClick={() => updateTaskProgress(task.id, Math.min(task.progress + 10, 100))}>
-                          <CheckCircle className="h-4 w-4" />
-                        </Button>
                         <Button 
                           variant="ghost" 
                           size="icon" 
