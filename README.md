@@ -63,8 +63,7 @@ NotiTaskは、タスク管理をゲーム感覚で楽しめるウェブアプリ
 - LocalStorage
 
 ### 開発ツール
-- ESLint
-- Prettier
+- Cursor
 
 ## 📚 今後の展望
 
