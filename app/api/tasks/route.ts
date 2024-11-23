@@ -1,27 +1,33 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { notionService } from '@/lib/notion';
+import { Task, CreateTaskInput } from '@/types/task';
 
-interface TaskData {
+interface TaskData extends CreateTaskInput {
   title: string;
   description: string;
-  status: string;
-  // 他の必要なプロパティ
+  priority: Task['priority'];
+  status: Task['status'];
+  deadline: string;
+  tags: string[];
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const priority = searchParams.get('priority') as any;
-    const status = searchParams.get('status') as any;
-    const search = searchParams.get('search');
-    const sortField = searchParams.get('sortField') as any;
-    const sortDirection = searchParams.get('sortDirection') as any;
+    const searchParams = request.nextUrl.searchParams;
+    const priority = searchParams.get('priority') as Task['priority'] | undefined;
+    const status = searchParams.get('status') as Task['status'] | undefined;
+    const search = searchParams.get('search') || undefined;
+    const sortField = searchParams.get('sortField') as 'deadline' | 'priority' | 'progress' | undefined;
+    const sortDirection = searchParams.get('sortDirection') as 'ascending' | 'descending' | undefined;
 
     const tasks = await notionService.getFilteredTasks({
       priority,
       status,
       search,
-      sort: sortField ? { field: sortField, direction: sortDirection } : undefined,
+      sort: sortField && sortDirection ? { 
+        field: sortField, 
+        direction: sortDirection 
+      } : undefined,
     });
     
     return NextResponse.json(tasks);
