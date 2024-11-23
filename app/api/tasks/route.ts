@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server';
 import { notionService } from '@/lib/notion';
 
+interface TaskData {
+  title: string;
+  description: string;
+  status: string;
+  // 他の必要なプロパティ
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -24,10 +31,10 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<Response> {
   try {
-    const body = await request.json();
-    const task = await notionService.createTask(body);
+    const data: TaskData = await request.json();
+    const task = await notionService.createTask(data);
     return NextResponse.json(task);
   } catch (error) {
     console.error('Failed to create task:', error);

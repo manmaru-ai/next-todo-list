@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Progress } from "@/components/ui/progress"
 import { format } from 'date-fns';
@@ -26,52 +26,35 @@ export function ProfileDialog({ open, onOpenChange, points, history, stats }: Pr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>プロフィール</DialogTitle>
+          <DialogDescription>
+            現在のポイントと獲得履歴を確認できます。
+          </DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="overview" className="py-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="overview">概要</TabsTrigger>
-            <TabsTrigger value="history">履歴</TabsTrigger>
-          </TabsList>
-          <TabsContent value="overview">
-            <div className="space-y-6">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold">Level {stats.level}</h3>
-                <div className="mt-2">
-                  <Progress value={progressToNextLevel} className="h-2" />
-                  <p className="text-sm text-muted-foreground mt-1">
-                    次のレベルまで: {stats.nextLevelPoints - stats.currentPoints} pt
-                  </p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 gap-4 text-center">
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-semibold">総獲得ポイント</h4>
-                  <p className="text-2xl font-bold text-primary">{points} pt</p>
-                </div>
-              </div>
+        <div className="grid gap-4 py-4">
+          <div className="space-y-2">
+            <h3 className="text-lg font-medium">ポイント: {points}</h3>
+            <div className="text-sm text-muted-foreground">
+              レベル: {Math.floor(points / 1000) + 1}
             </div>
-          </TabsContent>
-          <TabsContent value="history">
-            <ScrollArea className="h-[300px] rounded-md border p-4">
-              {history.map((item) => (
-                <div key={item.id} className="mb-4 last:mb-0">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">{item.action}</span>
-                    <span className={`font-bold ${item.points > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                      {item.points > 0 ? `+${item.points}` : item.points} pt
-                    </span>
+          </div>
+          <div className="space-y-2">
+            <h4 className="font-medium">ポイント獲得履歴</h4>
+            <div className="max-h-[200px] overflow-y-auto space-y-2">
+              {history.map((entry, index) => (
+                <div key={index} className="text-sm border-b pb-2">
+                  <div className="font-medium">{entry.action}</div>
+                  <div className="text-muted-foreground flex justify-between">
+                    <span>+{entry.points}pt</span>
+                    <span>{new Date(entry.timestamp).toLocaleString()}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {format(new Date(item.timestamp), 'yyyy/MM/dd HH:mm')}
-                  </p>
                 </div>
               ))}
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
+            </div>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -7,6 +7,13 @@ const notion = new Client({
 
 const DATABASE_ID = process.env.NOTION_DATABASE_ID!;
 
+// Notionの型定義を追加
+interface NotionPage {
+  id: string;
+  properties: Record<string, unknown>;
+  // 他の必要なプロパティ
+}
+
 export const notionService = {
   async getTasks(): Promise<Task[]> {
     try {
