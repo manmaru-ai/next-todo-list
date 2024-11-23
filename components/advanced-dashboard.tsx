@@ -206,7 +206,7 @@ export function AdvancedDashboardComponent() {
       <div className="bg-background text-foreground">
         <header className="border-b sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <h1 className="text-2xl font-bold">TodoList</h1>
+            <h1 className="text-2xl font-bold">NotiTask</h1>
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <Button 
@@ -226,7 +226,7 @@ export function AdvancedDashboardComponent() {
                   <div className="absolute right-0 mt-2 w-80 bg-background border rounded-lg shadow-lg z-50">
                     <div className="p-4">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold">Notifications</h3>
+                        <h3 className="font-semibold">通知</h3>
                         <Button 
                           variant="ghost" 
                           size="icon" 
@@ -299,7 +299,7 @@ export function AdvancedDashboardComponent() {
             <div className="flex items-center space-x-4">
               <Input
                 type="search"
-                placeholder="Search tasks..."
+                placeholder="タスクを検索..."
                 className="w-64"
                 value={searchQuery}
                 onChange={handleSearch}
@@ -312,29 +312,29 @@ export function AdvancedDashboardComponent() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem onClick={() => applyFilter('priority', undefined)}>
-                    All Priorities
+                    すべての重要度
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applyFilter('priority', 'High')}>
-                    High Priority
+                    重要度：高
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applyFilter('priority', 'Medium')}>
-                    Medium Priority
+                    重要度：中
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applyFilter('priority', 'Low')}>
-                    Low Priority
+                    重要度：低
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => applyFilter('status', undefined)}>
-                    All Status
+                    すべてのステータス
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applyFilter('status', 'To Do')}>
-                    To Do
+                    未着手
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applyFilter('status', 'In Progress')}>
-                    In Progress
+                    進行中
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applyFilter('status', 'Done')}>
-                    Done
+                    完了
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -346,13 +346,13 @@ export function AdvancedDashboardComponent() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem onClick={() => applySort('deadline')}>
-                    Date {activeSort.field === 'deadline' && (activeSort.direction === 'ascending' ? '↑' : '↓')}
+                    期限 {activeSort.field === 'deadline' && (activeSort.direction === 'ascending' ? '↑' : '↓')}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applySort('priority')}>
-                    Priority {activeSort.field === 'priority' && (activeSort.direction === 'ascending' ? '↑' : '↓')}
+                    重要度 {activeSort.field === 'priority' && (activeSort.direction === 'ascending' ? '↑' : '↓')}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => applySort('progress')}>
-                    Progress {activeSort.field === 'progress' && (activeSort.direction === 'ascending' ? '↑' : '↓')}
+                    進捗 {activeSort.field === 'progress' && (activeSort.direction === 'ascending' ? '↑' : '↓')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -360,14 +360,14 @@ export function AdvancedDashboardComponent() {
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => setOpen(true)}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Task
+                  <Plus className="mr-2 h-4 w-4" /> タスクを追加
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Add New Task</DialogTitle>
+                  <DialogTitle>新規タスク作成</DialogTitle>
                   <DialogDescription>
-                    Create a new task here. Click save when you're done.
+                    新しいタスクを作成します。完了したら保存をクリックしてください。
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={async (e) => {
@@ -385,15 +385,15 @@ export function AdvancedDashboardComponent() {
                 }}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="title" className="text-right">Title</Label>
+                      <Label htmlFor="title" className="text-right">タイトル</Label>
                       <Input id="title" name="title" className="col-span-3" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="description" className="text-right">Description</Label>
+                      <Label htmlFor="description" className="text-right">説明</Label>
                       <Textarea id="description" name="description" className="col-span-3" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="priority" className="text-right">Priority</Label>
+                      <Label htmlFor="priority" className="text-right">重要度</Label>
                       <Select name="priority" required>
                         <SelectTrigger className="col-span-3">
                           <SelectValue placeholder="Select priority" />
@@ -406,11 +406,11 @@ export function AdvancedDashboardComponent() {
                       </Select>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="deadline" className="text-right">Deadline</Label>
+                      <Label htmlFor="deadline" className="text-right">期限</Label>
                       <Input id="deadline" name="deadline" type="date" className="col-span-3" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="tags" className="text-right">Tags</Label>
+                      <Label htmlFor="tags" className="text-right">タグ</Label>
                       <Input 
                         id="tags" 
                         name="tags" 
@@ -429,10 +429,10 @@ export function AdvancedDashboardComponent() {
           </div>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
             <TabsList>
-              <TabsTrigger value="all">All Tasks</TabsTrigger>
-              <TabsTrigger value="todo">To Do</TabsTrigger>
-              <TabsTrigger value="inprogress">In Progress</TabsTrigger>
-              <TabsTrigger value="done">Done</TabsTrigger>
+              <TabsTrigger value="all">すべてのタスク</TabsTrigger>
+              <TabsTrigger value="todo">未着手</TabsTrigger>
+              <TabsTrigger value="inprogress">進行中</TabsTrigger>
+              <TabsTrigger value="done">完了</TabsTrigger>
             </TabsList>
             <TabsContent value={activeTab} className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -489,10 +489,10 @@ export function AdvancedDashboardComponent() {
         </main>
         <footer className="border-t">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">© 2023 TodoList App. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">© 2023 NotiTask. All rights reserved.</p>
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm">
-                <Settings className="mr-2 h-4 w-4" /> Settings
+                <Settings className="mr-2 h-4 w-4" /> 設定
               </Button>
               <div className="flex items-center space-x-2">
                 <Sun className="h-4 w-4" />
@@ -506,9 +506,9 @@ export function AdvancedDashboardComponent() {
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit Task</DialogTitle>
+            <DialogTitle>タスクの編集</DialogTitle>
             <DialogDescription>
-              Make changes to your task here. Click save when you're done.
+              タスクの内容を編集できます。完了したら保存をクリックしてください。
             </DialogDescription>
           </DialogHeader>
           {editingTask && (
@@ -526,7 +526,7 @@ export function AdvancedDashboardComponent() {
             }}>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="edit-title" className="text-right">Title</Label>
+                  <Label htmlFor="edit-title" className="text-right">タイトル</Label>
                   <Input 
                     id="edit-title" 
                     name="title" 
@@ -536,7 +536,7 @@ export function AdvancedDashboardComponent() {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="edit-description" className="text-right">Description</Label>
+                  <Label htmlFor="edit-description" className="text-right">説明</Label>
                   <Textarea 
                     id="edit-description" 
                     name="description" 
@@ -546,7 +546,7 @@ export function AdvancedDashboardComponent() {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="edit-priority" className="text-right">Priority</Label>
+                  <Label htmlFor="edit-priority" className="text-right">重要度</Label>
                   <Select name="priority" defaultValue={editingTask.priority}>
                     <SelectTrigger className="col-span-3">
                       <SelectValue />
@@ -559,7 +559,7 @@ export function AdvancedDashboardComponent() {
                   </Select>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="edit-deadline" className="text-right">Deadline</Label>
+                  <Label htmlFor="edit-deadline" className="text-right">期限</Label>
                   <Input 
                     id="edit-deadline" 
                     name="deadline" 
@@ -570,7 +570,7 @@ export function AdvancedDashboardComponent() {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="edit-tags" className="text-right">Tags</Label>
+                  <Label htmlFor="edit-tags" className="text-right">タグ</Label>
                   <Input 
                     id="edit-tags" 
                     name="tags" 
