@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NotiTask - タスク管理アプリケーション
 
-## Getting Started
+## 概要
 
-First, run the development server:
+NotiTaskは、タスク管理をより効率的に行うためのウェブアプリケーションです。直感的なUIと豊富な機能により、タスクの作成から完了までをシームレスに管理できます。
+
+## 主な機能
+
+### 1. タスク管理の基本機能
+- タスクの作成、編集、削除
+- 優先度の設定（高・中・低）
+- 期限の設定
+- 進捗率の管理
+- タグによる分類
+
+### 2. タスクの表示と整理
+- ステータスによるタブ分け（全て・未着手・進行中・完了）
+- 優先度や期限によるソート機能
+- タグやステータスによるフィルタリング
+- タスク検索機能
+
+### 3. 通知システム
+- 期限が近いタスクの通知
+- 優先度に応じた通知の重要度表示
+- リアルタイムの通知更新
+
+### 4. UI/UX の特徴
+- ダークモード対応
+- レスポンシブデザイン
+- ドラッグ&ドロップによる直感的な操作
+- プログレスバーによる進捗の可視化
+
+## 工夫した点
+
+### 1. 使いやすさの追求
+- タスクカードのコンパクトな表示と詳細情報の両立
+- ワンクリックでの進捗更新
+- 直感的なアイコンの使用
+
+### 2. 効率的なタスク管理
+- 複数の並び替え・フィルタリングオプション
+- クイック編集機能
+- バッチ処理による通知の最適化
+
+### 3. データの永続化
+- LocalStorageを活用したオフライン対応
+- 自動保存機能
+
+## 使用技術
+
+### フロントエンド
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Radix UI
+- Lucide Icons
+
+### 状態管理・データ処理
+- React Hooks
+- LocalStorage
+- Notion API
+
+### 開発環境・ツール
+- ESLint
+- Prettier
+- Git/GitHub
+
+## 開発期間と工数
+- 開発期間：2週間
+- 総工数：約40時間
+  - 基本機能の実装：20時間
+  - UI/UXの改善：10時間
+  - テストとデバッグ：5時間
+  - ドキュメント作成：5時間
+
+## セットアップ方法
 
 ```bash
+# リポジトリのクローン
+git clone https://github.com/yourusername/notitask.git
+
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 環境変数の設定
+`.env.local`ファイルを作成し、以下の環境変数を設定してください：
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+NOTION_API_KEY=your_notion_api_key
+NOTION_DATABASE_ID=your_notion_database_id
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 今後の展望
 
-## Learn More
+- チーム機能の追加
+- カレンダー表示の実装
+- モバイルアプリ版の開発
+- AI機能の統合（タスクの自動分類・優先度提案）
 
-To learn more about Next.js, take a look at the following resources:
+## ライセンス
+MIT License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 作者
+[Your Name]
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 謝辞
+本プロジェクトは、高専のプログラミング3の課題として作成されました。
