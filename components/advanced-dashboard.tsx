@@ -504,9 +504,23 @@ export function AdvancedDashboardComponent() {
             <TabsContent value={activeTab} className="space-y-4">
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {getFilteredTasks(tasks, activeTab).map((task) => (
-                  <Card key={task.id} className="flex flex-col">
+                  <Card 
+                    key={task.id} 
+                    className={`flex flex-col ${
+                      task.status === 'Done' ? 'bg-muted/50 border-green-200' : 
+                      task.status === 'In Progress' ? 'border-blue-200' : 
+                      'border-gray-200'
+                    }`}
+                  >
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <h3 className="text-sm font-medium break-all pr-2">{task.title}</h3>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${
+                          task.status === 'Done' ? 'bg-green-500' : 
+                          task.status === 'In Progress' ? 'bg-blue-500' : 
+                          'bg-gray-500'
+                        }`} />
+                        <h3 className="text-sm font-medium break-all pr-2">{task.title}</h3>
+                      </div>
                       <Badge variant={task.priority === "High" ? "destructive" : task.priority === "Medium" ? "default" : "secondary"}>
                         {task.priority}
                       </Badge>
