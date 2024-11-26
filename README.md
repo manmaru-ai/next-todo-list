@@ -85,7 +85,7 @@ NotiTaskは、タスク管理をゲーム感覚で楽しめるウェブアプリ
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/yourusername/notitask.git
+git clone https://github.com/manmaru-ai/next-todo-list.git
 
 # パッケージのインストール
 npm install
