@@ -100,6 +100,8 @@ npm run dev
 
 特に注力したのは、タスクの状態を視覚的に分かりやすくすることです。色による状態の区別や、シンプルなステータス管理により、ユーザーが直感的にタスクの状態を把握できるようにしました。
 
+また、細かな行動（タスクの開始や進捗更新）にもポイントを付与することで、小さな成功体験を積み重ねられるように工夫しました。
+
 ## 開発履歴
 
 - 2024年10月24日：プロジェクト開始
@@ -127,5 +129,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-また、細かな行動（タスクの開始や進捗更新）にもポイントを付与することで、小さな成功体験を積み重ねられるように工夫しました。
